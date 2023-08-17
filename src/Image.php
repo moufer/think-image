@@ -279,12 +279,14 @@ class Image
      */
     public function crop($w, $h, $x = 0, $y = 0, $width = null, $height = null)
     {
+        $w = (int)$w;
+        $h = (int)$h;
         //设置保存尺寸
-        empty($width) && $width   = $w;
-        empty($height) && $height = $h;
+        $width = empty($width) ? $w : (int)$width;
+        $height = empty($height) ? $h : (int)$height;
         do {
             //创建新图像
-            $img = imagecreatetruecolor((int)$width, (int)$height);
+            $img = imagecreatetruecolor($width, $height);
             // 调整默认颜色
             $color = imagecolorallocate($img, 255, 255, 255);
             imagefill($img, 0, 0, $color);
@@ -294,8 +296,8 @@ class Image
             //设置新图像
             $this->im = $img;
         } while (!empty($this->gif) && $this->gifNext());
-        $this->info['width']  = (int) $width;
-        $this->info['height'] = (int) $height;
+        $this->info['width']  = $width;
+        $this->info['height'] = $height;
         return $this;
     }
 
