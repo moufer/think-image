@@ -85,7 +85,6 @@ class Image
         if (empty($this->im)) {
             throw new ImageException('Failed to create image resources!');
         }
-
     }
 
     /**
@@ -146,10 +145,9 @@ class Image
      */
     public function output()
     {
-        $type =$this->info['type'] ;
+        $type = $this->info['type'];
         header("content-type: image/{$type}");
-        switch ($type)
-        {
+        switch ($type) {
             case 'png':
                 imagepng($this->im);
                 break;
@@ -262,7 +260,6 @@ class Image
 
             imagedestroy($this->im);
             $this->im = $img;
-
         } while (!empty($this->gif) && $this->gifNext());
 
         return $this;
@@ -287,7 +284,7 @@ class Image
         empty($height) && $height = $h;
         do {
             //创建新图像
-            $img = imagecreatetruecolor($width, $height);
+            $img = imagecreatetruecolor((int)$width, (int)$height);
             // 调整默认颜色
             $color = imagecolorallocate($img, 255, 255, 255);
             imagefill($img, 0, 0, $color);
@@ -318,7 +315,7 @@ class Image
         $h = $this->info['height'];
         /* 计算缩略图生成的必要参数 */
         switch ($type) {
-            /* 等比例缩放 */
+                /* 等比例缩放 */
             case self::THUMB_SCALING:
                 //原图尺寸小于缩略图尺寸则不进行缩略
                 if ($w < $width && $h < $height) {
@@ -331,7 +328,7 @@ class Image
                 $width  = $w * $scale;
                 $height = $h * $scale;
                 break;
-            /* 居中裁剪 */
+                /* 居中裁剪 */
             case self::THUMB_CENTER:
                 //计算缩放比例
                 $scale = max($width / $w, $height / $h);
@@ -341,7 +338,7 @@ class Image
                 $x = ($this->info['width'] - $w) / 2;
                 $y = ($this->info['height'] - $h) / 2;
                 break;
-            /* 左上角裁剪 */
+                /* 左上角裁剪 */
             case self::THUMB_NORTHWEST:
                 //计算缩放比例
                 $scale = max($width / $w, $height / $h);
@@ -350,7 +347,7 @@ class Image
                 $w = $width / $scale;
                 $h = $height / $scale;
                 break;
-            /* 右下角裁剪 */
+                /* 右下角裁剪 */
             case self::THUMB_SOUTHEAST:
                 //计算缩放比例
                 $scale = max($width / $w, $height / $h);
@@ -360,7 +357,7 @@ class Image
                 $x = $this->info['width'] - $w;
                 $y = $this->info['height'] - $h;
                 break;
-            /* 填充 */
+                /* 填充 */
             case self::THUMB_FILLED:
                 //计算缩放比例
                 if ($w < $width && $h < $height) {
@@ -389,7 +386,7 @@ class Image
                 $this->info['width']  = (int) $width;
                 $this->info['height'] = (int) $height;
                 return $this;
-            /* 固定 */
+                /* 固定 */
             case self::THUMB_FIXED:
                 $x = $y = 0;
                 break;
@@ -425,46 +422,46 @@ class Image
         imagealphablending($water, true);
         /* 设定水印位置 */
         switch ($locate) {
-            /* 右下角水印 */
+                /* 右下角水印 */
             case self::WATER_SOUTHEAST:
                 $x = $this->info['width'] - $info[0];
                 $y = $this->info['height'] - $info[1];
                 break;
-            /* 左下角水印 */
+                /* 左下角水印 */
             case self::WATER_SOUTHWEST:
                 $x = 0;
                 $y = $this->info['height'] - $info[1];
                 break;
-            /* 左上角水印 */
+                /* 左上角水印 */
             case self::WATER_NORTHWEST:
                 $x = $y = 0;
                 break;
-            /* 右上角水印 */
+                /* 右上角水印 */
             case self::WATER_NORTHEAST:
                 $x = $this->info['width'] - $info[0];
                 $y = 0;
                 break;
-            /* 居中水印 */
+                /* 居中水印 */
             case self::WATER_CENTER:
                 $x = ($this->info['width'] - $info[0]) / 2;
                 $y = ($this->info['height'] - $info[1]) / 2;
                 break;
-            /* 下居中水印 */
+                /* 下居中水印 */
             case self::WATER_SOUTH:
                 $x = ($this->info['width'] - $info[0]) / 2;
                 $y = $this->info['height'] - $info[1];
                 break;
-            /* 右居中水印 */
+                /* 右居中水印 */
             case self::WATER_EAST:
                 $x = $this->info['width'] - $info[0];
                 $y = ($this->info['height'] - $info[1]) / 2;
                 break;
-            /* 上居中水印 */
+                /* 上居中水印 */
             case self::WATER_NORTH:
                 $x = ($this->info['width'] - $info[0]) / 2;
                 $y = 0;
                 break;
-            /* 左居中水印 */
+                /* 左居中水印 */
             case self::WATER_WEST:
                 $x = 0;
                 $y = ($this->info['height'] - $info[1]) / 2;
@@ -508,8 +505,15 @@ class Image
      * @return $this
      * @throws ImageException
      */
-    public function text($text, $font, $size, $color = '#00000000',
-        $locate = self::WATER_SOUTHEAST, $offset = 0, $angle = 0) {
+    public function text(
+        $text,
+        $font,
+        $size,
+        $color = '#00000000',
+        $locate = self::WATER_SOUTHEAST,
+        $offset = 0,
+        $angle = 0
+    ) {
 
         if (!is_file($font)) {
             throw new ImageException("不存在的字体文件：{$font}");
@@ -527,43 +531,43 @@ class Image
         $h = $maxy - $miny;
         /* 设定文字位置 */
         switch ($locate) {
-            /* 右下角文字 */
+                /* 右下角文字 */
             case self::WATER_SOUTHEAST:
                 $x += $this->info['width'] - $w;
                 $y += $this->info['height'] - $h;
                 break;
-            /* 左下角文字 */
+                /* 左下角文字 */
             case self::WATER_SOUTHWEST:
                 $y += $this->info['height'] - $h;
                 break;
-            /* 左上角文字 */
+                /* 左上角文字 */
             case self::WATER_NORTHWEST:
                 // 起始坐标即为左上角坐标，无需调整
                 break;
-            /* 右上角文字 */
+                /* 右上角文字 */
             case self::WATER_NORTHEAST:
                 $x += $this->info['width'] - $w;
                 break;
-            /* 居中文字 */
+                /* 居中文字 */
             case self::WATER_CENTER:
                 $x += ($this->info['width'] - $w) / 2;
                 $y += ($this->info['height'] - $h) / 2;
                 break;
-            /* 下居中文字 */
+                /* 下居中文字 */
             case self::WATER_SOUTH:
                 $x += ($this->info['width'] - $w) / 2;
                 $y += $this->info['height'] - $h;
                 break;
-            /* 右居中文字 */
+                /* 右居中文字 */
             case self::WATER_EAST:
                 $x += $this->info['width'] - $w;
                 $y += ($this->info['height'] - $h) / 2;
                 break;
-            /* 上居中文字 */
+                /* 上居中文字 */
             case self::WATER_NORTH:
                 $x += ($this->info['width'] - $w) / 2;
                 break;
-            /* 左居中文字 */
+                /* 左居中文字 */
             case self::WATER_WEST:
                 $y += ($this->info['height'] - $h) / 2;
                 break;
@@ -664,5 +668,4 @@ class Image
     {
         empty($this->im) || imagedestroy($this->im);
     }
-
 }
